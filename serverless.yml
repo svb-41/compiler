@@ -5,6 +5,11 @@ provider:
   name: aws
   runtime: nodejs12.x
   lambdaHashingVersion: '20201221'
+  iamRolesStatements:
+    - Effect: 'Allow'
+      Action:
+        - 's3:ListBucket'
+        - 's3:PutObject'
 
 functions:
   compile:
