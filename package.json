@@ -8,6 +8,7 @@
     "webpack": "^5.53.0"
   },
   "scripts": {
-    "deploy": "serverless deploy"
+    "deploy": "serverless deploy",
+    "ci": "echo 'wow CI'"
   }
 }
