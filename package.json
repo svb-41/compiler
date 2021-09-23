@@ -7,7 +7,7 @@
     "webpack": "^5.53.0"
   },
   "scripts": {
-    "local": "serverless invoke local -f compile",
+    "local": "serverless invoke local -f compile -p samples/dummy.json",
     "deploy": "serverless deploy"
   }
 }
