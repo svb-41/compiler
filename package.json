@@ -1,0 +1,13 @@
+{
+  "name": "starship-compiler",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "webpack": "^5.53.0"
+  },
+  "scripts": {
+    "local": "serverless invoke local -f compile",
+    "deploy": "serverless deploy"
+  }
+}
