@@ -3,13 +3,14 @@ frameworkVersion: '2'
 
 provider:
   name: aws
+  region: eu-west-3
   runtime: nodejs12.x
   lambdaHashingVersion: '20201221'
-  iamRolesStatements:
+  iamRoleStatements:
     - Effect: 'Allow'
       Action:
-        - 's3:ListBucket'
         - 's3:PutObject'
+      Resource: 'arn:aws:s3:::*'
 
 functions:
   compile:
