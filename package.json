@@ -4,11 +4,19 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "@babel/core": "^7.15.5",
+    "@babel/preset-env": "^7.15.6",
+    "babel-loader": "^8.2.2",
+    "memfs": "^3.3.0",
     "node-fetch": "^2.0.0",
-    "webpack": "^5.53.0"
+    "uuid": "^8.3.2",
+    "webpack": "^5.54.0"
   },
   "scripts": {
     "deploy": "serverless deploy",
     "ci": "echo 'wow CI'"
+  },
+  "devDependencies": {
+    "prettier": "^2.4.1"
   }
 }
