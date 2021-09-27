@@ -6,6 +6,8 @@ provider:
   region: eu-west-3
   runtime: nodejs14.x
   lambdaHashingVersion: '20201221'
+  httpApi:
+    cors: true
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -19,4 +21,3 @@ functions:
       - httpApi:
           path: /
           method: post
-          cors: true
