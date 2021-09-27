@@ -1,23 +1,30 @@
-const dummy = require('../samples/dummy.json')
 const webpack = require('webpack')
 const configuration = require('./webpack.config')
 const memfs = require('memfs')
-const { v4: uuid } = require('uuid')
+const fs = require('fs').promises
+const path = require('path')
 
-module.exports = async () => {
-  const fileID = uuid() + '.js'
+const copyStarshipsCore = async ({ mfs }) => {
+  const corePath = path.resolve(__dirname, 'starships-core.ts')
+  const core = await fs.readFile(corePath, 'utf-8')
+  await mfs.promises.writeFile(`/src/starships-core.ts`, core)
+}
+
+module.exports = async ({ code, ...params }) => {
+  const name = [params.uid, params.name].join('-')
   const volume = new memfs.Volume()
-  const fs = memfs.createFsFromVolume(volume)
-  await fs.promises.mkdir('/src')
-  await fs.promises.writeFile(`/src/${fileID}`, dummy.code)
-  const compiler = webpack(configuration(fileID))
-  compiler.inputFileSystem = fs
-  compiler.outputFileSystem = fs
+  const mfs = memfs.createFsFromVolume(volume)
+  await mfs.promises.mkdir('/src')
+  await mfs.promises.writeFile(`/src/${name}`, code)
+  await copyStarshipsCore({ mfs })
+  const compiler = webpack(configuration(name))
+  compiler.inputFileSystem = mfs
+  compiler.outputFileSystem = mfs
   await new Promise((res, rej) => {
     compiler.run((err, stats) => {
       err ? rej(err) : res(stats)
     })
   })
-  const compiled = await fs.promises.readFile(`/dist/${fileID}`, 'utf-8')
+  const compiled = await mfs.promises.readFile(`/dist/${name}`, 'utf-8')
   return compiled
 }
