@@ -6,6 +6,8 @@ provider:
   region: eu-west-3
   runtime: nodejs14.x
   lambdaHashingVersion: '20201221'
+  memorySize: 2048
+  timeout: 50
   httpApi:
     cors: true
   iamRoleStatements:
