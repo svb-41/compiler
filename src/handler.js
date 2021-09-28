@@ -4,7 +4,11 @@ const S3 = new AWS.S3()
 const Bucket = 'svb-41-dev'
 
 const putObject = ({ path, content }) =>
-  S3.putObject({ Bucket, Key: path, Body: content })
+  new Promise((res, rej) =>
+    S3.putObject({ Bucket, Key: path, Body: content }, (err, data) =>
+      err ? rej(err) : res(data)
+    )
+  )
 
 module.exports.compile = async event => {
   const { code, uid, name } = JSON.parse(event.body)
