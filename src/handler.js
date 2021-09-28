@@ -20,10 +20,9 @@ module.exports.compile = async event => {
         putObject({ path: `${uid}/${name}`, content: code }),
       ])
     )
-    const body = JSON.stringify(compiled)
     return {
       statusCode: 200,
-      body,
+      body: compiled,
       headers: {
         'Access-Control-Allow-Origin': '*',
       },
