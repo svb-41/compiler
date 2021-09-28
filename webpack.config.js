@@ -1,7 +1,8 @@
+const path = require('path')
+
 module.exports = name => ({
   mode: process.env.NODE_ENV === 'development' ? 'development' : 'production',
   entry: `/src/${name}`,
-  experiments: { outputModule: true },
   output: {
     path: '/dist',
     filename: name,
@@ -10,13 +11,13 @@ module.exports = name => ({
     },
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.jsx', '.js', '.mjs', '.cjs'],
-    alias: { '@starships-core': '/src/starships-core.ts' },
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs'],
+    alias: { '@starships/core': '/src/starships-core' },
   },
   module: {
     rules: [
       {
-        test: '/.jsx?$/',
+        test: /\.jsx?$/,
         use: {
           loader: 'babel-loader',
           options: {
@@ -34,9 +35,12 @@ module.exports = name => ({
         },
       },
       {
-        test: '/.tsx?$/',
+        test: /\.tsx?$/,
         use: {
           loader: 'ts-loader',
+          options: {
+            configFile: path.resolve(__dirname, 'tsconfig.json'),
+          },
         },
       },
     ],

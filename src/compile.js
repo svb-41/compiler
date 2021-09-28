@@ -1,12 +1,13 @@
 const webpack = require('webpack')
-const configuration = require('./webpack.config')
+const configuration = require('../webpack.config')
 const memfs = require('memfs')
-const fs = require('fs').promises
+const { ufs } = require('unionfs')
+const fs = require('fs')
 const path = require('path')
 
 const copyStarshipsCore = async ({ mfs }) => {
   const corePath = path.resolve(__dirname, 'starships-core.ts')
-  const core = await fs.readFile(corePath, 'utf-8')
+  const core = await fs.promises.readFile(corePath, 'utf-8')
   await mfs.promises.writeFile(`/src/starships-core.ts`, core)
 }
 
@@ -14,14 +15,16 @@ module.exports = async ({ code, ...params }) => {
   const name = [params.uid, params.name].join('-')
   const volume = new memfs.Volume()
   const mfs = memfs.createFsFromVolume(volume)
+  ufs.use(fs).use(mfs)
   await mfs.promises.mkdir('/src')
   await mfs.promises.writeFile(`/src/${name}`, code)
   await copyStarshipsCore({ mfs })
   const compiler = webpack(configuration(name))
-  compiler.inputFileSystem = mfs
-  compiler.outputFileSystem = mfs
+  compiler.inputFileSystem = ufs
+  compiler.outputFileSystem = ufs
   await new Promise((res, rej) => {
     compiler.run((err, stats) => {
+      console.log(err)
       console.log(stats.toJson().errors)
       err ? rej(err) : res(stats)
     })

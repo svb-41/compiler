@@ -1,5 +1,4 @@
 {
-  "extends": "./tsconfig.extend.json",
   "compilerOptions": {
     "target": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -14,8 +13,12 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx"
+    "noEmit": false,
+    "outDir": "./dist",
+    "baseUrl": ".",
+    "paths": {
+      "@starships/core": ["src/starships-core.ts"]
+    }
   },
   "include": ["src"]
 }
