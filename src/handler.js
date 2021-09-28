@@ -10,10 +10,10 @@ const putObject = ({ path, content }) =>
     )
   )
 
-module.exports.compile = async event => {
+module.exports.compile = async (event, context) => {
   const { code, uid, name } = JSON.parse(event.body)
   try {
-    const compiled = await compile({ code, uid, name })
+    const compiled = await compile({ code, uid, name }, context)
     console.log(
       await Promise.all([
         putObject({ path: `${uid}/${name}-compiled`, content: compiled }),

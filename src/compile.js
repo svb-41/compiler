@@ -11,12 +11,15 @@ const copyStarshipsCore = async ({ mfs }) => {
   await mfs.promises.writeFile(`/src/starships-core.ts`, core)
 }
 
-module.exports = async ({ code, ...params }) => {
-  const name = [params.uid, params.name].join('-')
+module.exports = async ({ code, ...params }, context = {}) => {
+  const execId = context.awsRequestId || 'defaultId'
+  console.log('awsRequestId', execId)
+  const name = `${execId}/${[params.uid, params.name].join('-')}`
   const volume = new memfs.Volume()
   const mfs = memfs.createFsFromVolume(volume)
   ufs.use(fs).use(mfs)
   await mfs.promises.mkdir('/src')
+  await mfs.promises.mkdir(`/src/${execId}`)
   await mfs.promises.writeFile(`/src/${name}`, code)
   await copyStarshipsCore({ mfs })
   const compiler = webpack(configuration(name))
