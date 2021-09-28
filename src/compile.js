@@ -22,9 +22,9 @@ module.exports = async ({ code, ...params }) => {
   compiler.outputFileSystem = mfs
   await new Promise((res, rej) => {
     compiler.run((err, stats) => {
+      console.log(stats.toJson().errors)
       err ? rej(err) : res(stats)
     })
   })
-  const compiled = await mfs.promises.readFile(`/dist/${name}`, 'utf-8')
-  return compiled
+  return mfs.promises.readFile(`/dist/${name}`, 'utf-8')
 }
