@@ -2,6 +2,7 @@ const webpack = require('webpack')
 const configuration = require('../webpack.config')
 const memfs = require('memfs')
 const { ufs } = require('unionfs')
+// const ufs_ = require('unionfs')
 const fs = require('fs')
 const path = require('path')
 
@@ -14,6 +15,7 @@ const copyStarshipsCore = async ({ mfs }) => {
 module.exports = async ({ code, ...params }, context = {}) => {
   const execId = context.awsRequestId || 'defaultId'
   console.log('awsRequestId', execId)
+  // const ufs = new ufs_.Union()
   const name = `${execId}/${[params.uid, params.name].join('-')}`
   const volume = new memfs.Volume()
   const mfs = memfs.createFsFromVolume(volume)
