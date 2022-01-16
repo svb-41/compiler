@@ -6,7 +6,7 @@ const emulator = () => {
     if (request.method !== 'POST') return { statusCode: 404 }
     const event = { body: request.body }
     const context = {} // awsRequestId: ''
-    return handler(event, context)
+    return handler.compile(event, context)
   })
   console.log('Server started')
   return server

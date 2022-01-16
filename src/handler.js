@@ -8,14 +8,19 @@ const S3 = new AWS.S3()
 const Bucket = 'svb-41-dev'
 
 const headers = { 'Access-Control-Allow-Origin': '*' }
-const putObject = ({ path, content }) => {
+const putObject = async ({ path: p, content }) => {
   if (process.env.NODE_ENV === 'development') {
     const base = path.resolve(__dirname, '../s3')
-    const final = path.resolve(base, path)
-    return fs.writeFile(final, content)
+    const final = path.resolve(base, p)
+    const [_, ...all] = final.split('/').reverse()
+    const before = all.reverse().join('/')
+    await fs.promises.mkdir(before, { recursive: true })
+    return await fs.promises.writeFile(final, content)
   } else {
-    const put = util.promisify(S3.putObject)
-    return put({ Bucket, key: path, Body: content })
+    return await new Promise((res, rej) => {
+      const cb = (err, res_) => (err ? rej(err) : res(res_))
+      S3.putObject({ Bucket, key: path, Body: content }, cb)
+    })
   }
 }
 
