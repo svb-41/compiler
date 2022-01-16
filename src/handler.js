@@ -1,39 +1,35 @@
 const AWS = require('aws-sdk')
+const util = require('util')
+const path = require('path')
+const fs = require('fs')
 const compile = require('./compile')
+
 const S3 = new AWS.S3()
 const Bucket = 'svb-41-dev'
 
-const putObject = ({ path, content }) =>
-  new Promise((res, rej) =>
-    S3.putObject({ Bucket, Key: path, Body: content }, (err, data) =>
-      err ? rej(err) : res(data)
-    )
-  )
+const headers = { 'Access-Control-Allow-Origin': '*' }
+const putObject = ({ path, content }) => {
+  if (process.env.NODE_ENV === 'development') {
+    const base = path.resolve(__dirname, '../s3')
+    const final = path.resolve(base, path)
+    return fs.writeFile(final, content)
+  } else {
+    const put = util.promisify(S3.putObject)
+    return put({ Bucket, key: path, Body: content })
+  }
+}
 
 module.exports.compile = async (event, context) => {
   const { code, uid, name } = JSON.parse(event.body)
   try {
-    const compiled = await compile({ code, uid, name }, context)
-    console.log(
-      await Promise.all([
-        putObject({ path: `${uid}/${name}-compiled`, content: compiled }),
-        putObject({ path: `${uid}/${name}`, content: code }),
-      ])
-    )
-    return {
-      statusCode: 200,
-      body: compiled,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-      },
-    }
+    const content = await compile({ code, uid, name }, context)
+    const path = `${uid}/${name}`
+    const compiledFile = putObject({ path: `${path}-compiled`, content })
+    const rawFile = putObject({ path, content: code })
+    const results = await Promise.all([compiledFile, rawFile])
+    console.log(results)
+    return { statusCode: 200, body: content, headers }
   } catch (err) {
-    return {
-      statusCode: 500,
-      body: err.message,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-      },
-    }
+    return { statusCode: 500, body: err.message, headers }
   }
 }

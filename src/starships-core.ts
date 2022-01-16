@@ -1,4 +1,4 @@
-//SHIP
+// SHIP
 export type Ship = {
   id: string
   position: Position
@@ -106,7 +106,7 @@ export type ControllerArgs = {
   ship: ControlPanel
 }
 
-export class Controller<Data> {
+export class Controller<Data = any> {
   data: any
   shipId: string
   getInstruction: (args: ControllerArgs) => Instruction
@@ -306,6 +306,7 @@ const aim = ({
 
 const dist2 = (pos1: Position, pos2: Position) =>
   Math.pow(pos1.pos.x - pos2.pos.x, 2) + Math.pow(pos1.pos.y - pos2.pos.y, 2)
+
 export const helpers = {
   dist2,
   PI,

@@ -1,8 +1,7 @@
 const webpack = require('webpack')
 const configuration = require('../webpack.config')
 const memfs = require('memfs')
-const { ufs } = require('unionfs')
-// const ufs_ = require('unionfs')
+const unionfs = require('unionfs')
 const fs = require('fs')
 const path = require('path')
 
@@ -12,27 +11,44 @@ const copyStarshipsCore = async ({ mfs }) => {
   await mfs.promises.writeFile(`/src/starships-core.ts`, core)
 }
 
-module.exports = async ({ code, ...params }, context = {}) => {
-  const execId = context.awsRequestId || 'defaultId'
-  console.log('awsRequestId', execId)
-  // const ufs = new ufs_.Union()
-  const name = `${execId}/${[params.uid, params.name].join('-')}`
+const initUFS = mfs => {
+  const ufs = new unionfs.Union()
+  ufs.use(mfs).use(fs)
+  return ufs
+}
+
+const initMFS = async ({ execId, name, code }) => {
   const volume = new memfs.Volume()
   const mfs = memfs.createFsFromVolume(volume)
-  ufs.use(fs).use(mfs)
   await mfs.promises.mkdir('/src')
   await mfs.promises.mkdir(`/src/${execId}`)
   await mfs.promises.writeFile(`/src/${name}`, code)
   await copyStarshipsCore({ mfs })
+  return mfs
+}
+
+module.exports = async ({ code, ...params }, context = {}) => {
+  const execId = context.awsRequestId || 'defaultId'
+  console.log('awsRequestId', execId)
+  const name = `${execId}/${[params.uid, params.name].join('-')}`
+  const mfs = await initMFS({ execId, name, code })
+  const ufs = initUFS(mfs)
   const compiler = webpack(configuration(name))
   compiler.inputFileSystem = ufs
   compiler.outputFileSystem = ufs
-  await new Promise((res, rej) => {
+  const stats = await new Promise((res, rej) => {
     compiler.run((err, stats) => {
-      console.log(err)
-      console.log(stats.toJson().errors)
-      err ? rej(err) : res(stats)
+      if (err) {
+        console.log(err)
+        console.log(stats.toJson().errors)
+        rej(err)
+      } else {
+        res(stats)
+      }
     })
   })
-  return mfs.promises.readFile(`/dist/${name}`, 'utf-8')
+  const errors = stats.compilation.errors
+  if (errors.length > 0) throw errors
+  const outPath = `/dist/${name.replace(/\.ts$/g, '.js')}`
+  return ufs.promises.readFile(outPath, 'utf-8')
 }
