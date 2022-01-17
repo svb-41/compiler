@@ -19,7 +19,7 @@ const putObject = async ({ path: p, content }) => {
   } else {
     return await new Promise((res, rej) => {
       const cb = (err, res_) => (err ? rej(err) : res(res_))
-      S3.putObject({ Bucket, key: path, Body: content }, cb)
+      S3.putObject({ Bucket, Key: p, Body: content }, cb)
     })
   }
 }
@@ -32,9 +32,9 @@ module.exports.compile = async (event, context) => {
     const compiledFile = putObject({ path: `${path}-compiled`, content })
     const rawFile = putObject({ path, content: code })
     const results = await Promise.all([compiledFile, rawFile])
-    console.log(results)
+    if (process.env.NODE_ENV !== 'development') console.log(results)
     return { statusCode: 200, body: content, headers }
-  } catch (err) {
-    return { statusCode: 500, body: err.message, headers }
+  } catch (error) {
+    return { statusCode: 500, body: error.message, headers }
   }
 }

@@ -27,16 +27,8 @@ const initMFS = async ({ execId, name, code }) => {
   return mfs
 }
 
-module.exports = async ({ code, ...params }, context = {}) => {
-  const execId = context.awsRequestId || 'defaultId'
-  console.log('awsRequestId', execId)
-  const name = `${execId}/${[params.uid, params.name].join('-')}`
-  const mfs = await initMFS({ execId, name, code })
-  const ufs = initUFS(mfs)
-  const compiler = webpack(configuration(name))
-  compiler.inputFileSystem = ufs
-  compiler.outputFileSystem = ufs
-  const stats = await new Promise((res, rej) => {
+const runCompiler = compiler => {
+  return new Promise((res, rej) => {
     compiler.run((err, stats) => {
       if (err) {
         console.log(err)
@@ -47,8 +39,26 @@ module.exports = async ({ code, ...params }, context = {}) => {
       }
     })
   })
+}
+
+module.exports = async ({ code, ...params }, context = {}) => {
+  const execId = context.awsRequestId || 'defaultId'
+  const name = `${execId}/${[params.uid, params.name].join('-')}`
+  const mfs = await initMFS({ execId, name, code })
+  const ufs = initUFS(mfs)
+  const compiler = webpack(configuration(name))
+  compiler.inputFileSystem = ufs
+  compiler.outputFileSystem = ufs
+  const stats = await runCompiler(compiler)
   const errors = stats.compilation.errors
-  if (errors.length > 0) throw errors
+  if (errors.length > 0) {
+    const allErrors = errors.map(e => {
+      const { context, file, code, ...value } = JSON.parse(e.message)
+      return value
+    })
+    const content = JSON.stringify(allErrors)
+    throw new Error(content)
+  }
   const outPath = `/dist/${name.replace(/\.ts$/g, '.js')}`
   return ufs.promises.readFile(outPath, 'utf-8')
 }

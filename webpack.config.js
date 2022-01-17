@@ -30,6 +30,9 @@ module.exports = name => {
             loader: 'ts-loader',
             options: {
               configFile: path.resolve(__dirname, 'tsconfig.json'),
+              errorFormatter: message => {
+                return JSON.stringify(message)
+              },
             },
           },
         },

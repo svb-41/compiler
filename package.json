@@ -8,7 +8,7 @@
     "dev": "PORT=3333 NODE_ENV=development nodemon src/emulator.js",
     "deploy": "serverless deploy",
     "ci": "echo 'wow CI'",
-    "test": "jest"
+    "test": "NODE_ENV=development jest"
   },
   "dependencies": {
     "@babel/core": "^7.16.7",
