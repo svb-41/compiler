@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "PORT=3333 NODE_ENV=development node src/emulator.js",
+    "start": "PORT=3333 NODE_ENV=development node --max-old-space-size=8192 src/emulator.js",
     "dev": "PORT=3333 NODE_ENV=development nodemon src/emulator.js",
     "deploy": "serverless deploy",
     "ci": "echo 'wow CI'",
