@@ -5,28 +5,28 @@
   "license": "MIT",
   "scripts": {
     "start": "PORT=3333 NODE_ENV=development node --max-old-space-size=8192 src/emulator.js",
-    "dev": "PORT=3333 NODE_ENV=development nodemon src/emulator.js",
+    "dev": "PORT=3333 NODE_ENV=development nodemon --max-old-space-size=8192 src/emulator.js",
     "deploy": "serverless deploy",
     "ci": "echo 'wow CI'",
     "test": "NODE_ENV=development jest"
   },
   "dependencies": {
-    "@babel/core": "^7.16.7",
-    "@babel/preset-env": "^7.16.8",
-    "@frenchpastries/millefeuille": "^0.3.0",
-    "aws-sdk": "^2.1058.0",
+    "@babel/core": "^7.17.5",
+    "@babel/preset-env": "^7.16.11",
+    "@frenchpastries/millefeuille": "^1.0.2",
+    "aws-sdk": "^2.1077.0",
     "babel-loader": "^8.2.3",
     "memfs": "^3.4.1",
-    "node-fetch": "^3.1.1",
     "ts-loader": "^9.2.6",
-    "typescript": "^4.5.4",
+    "typescript": "^4.5.5",
     "unionfs": "^4.4.0",
     "uuid": "^8.3.2",
-    "webpack": "^5.66.0"
+    "webpack": "^5.69.1"
   },
   "devDependencies": {
-    "jest": "^27.4.7",
+    "jest": "^27.5.1",
+    "nodemon": "^2.0.15",
     "prettier": "^2.5.1",
-    "webpack-cli": "^4.9.1"
+    "webpack-cli": "^4.9.2"
   }
 }
