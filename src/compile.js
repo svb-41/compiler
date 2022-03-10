@@ -4,12 +4,7 @@ const memfs = require('memfs')
 const unionfs = require('unionfs')
 const fs = require('fs')
 const path = require('path')
-
-const copyStarshipsCore = async ({ mfs }) => {
-  const corePath = path.resolve(__dirname, 'starships-core.ts')
-  const core = await fs.promises.readFile(corePath, 'utf-8')
-  await mfs.promises.writeFile(`/src/starships-core.ts`, core)
-}
+const linkfs = require('linkfs')
 
 const initUFS = mfs => {
   const ufs = new unionfs.Union()
@@ -23,7 +18,6 @@ const initMFS = async ({ execId, name, code }) => {
   await mfs.promises.mkdir('/src')
   await mfs.promises.mkdir(`/src/${execId}`)
   await mfs.promises.writeFile(`/src/${name}`, code)
-  await copyStarshipsCore({ mfs })
   return mfs
 }
 
@@ -46,9 +40,11 @@ module.exports = async ({ code, ...params }, context = {}) => {
   const name = `${execId}/${[params.uid, params.name].join('-')}`
   const mfs = await initMFS({ execId, name, code })
   const ufs = initUFS(mfs)
+  const nodeModules = path.resolve(__dirname, '../node_modules')
+  const lfs = await linkfs.link(ufs, ['/node_modules', nodeModules])
   const compiler = webpack(configuration(name))
-  compiler.inputFileSystem = ufs
-  compiler.outputFileSystem = ufs
+  compiler.inputFileSystem = lfs
+  compiler.outputFileSystem = lfs
   const stats = await runCompiler(compiler)
   const errors = stats.compilation.errors
   if (errors.length > 0) {
@@ -60,5 +56,5 @@ module.exports = async ({ code, ...params }, context = {}) => {
     throw new Error(content)
   }
   const outPath = `/dist/${name.replace(/\.ts$/g, '.js')}`
-  return ufs.promises.readFile(outPath, 'utf-8')
+  return await ufs.promises.readFile(outPath, 'utf-8')
 }

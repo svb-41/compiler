@@ -3,6 +3,7 @@
     "target": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
+    "checkJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -17,7 +18,7 @@
     "outDir": "./dist",
     "baseUrl": ".",
     "paths": {
-      "@starships/core": ["src/starships-core.ts"]
+      // "@svb-41/core": ["src/starships-core.js"]
     }
   },
   "include": ["src"]
