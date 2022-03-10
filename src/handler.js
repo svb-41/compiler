@@ -26,7 +26,7 @@ const putObject = async ({ path: p, content }) => {
 
 module.exports.compile = async (event, context) => {
   const { code, uid, name } = JSON.parse(event.body)
-  console.log(`Compiling { uid: ${data.uid}, name: ${data.name} }`)
+  console.log(`Compiling { uid: ${uid}, name: ${name} }`)
   try {
     const content = await compile({ code, uid, name }, context)
     const path = `${uid}/${name}`
@@ -34,7 +34,7 @@ module.exports.compile = async (event, context) => {
     const rawFile = putObject({ path, content: code })
     const results = await Promise.all([compiledFile, rawFile])
     if (process.env.NODE_ENV !== 'development') console.log(results)
-    console.log(`Compiled { uid: ${data.uid}, name: ${data.name} }`)
+    console.log(`Compiled { uid: ${uid}, name: ${name} }`)
     return { statusCode: 200, body: content, headers }
   } catch (error) {
     console.error(`Error, ${error}`)
