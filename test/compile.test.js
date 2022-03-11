@@ -27,11 +27,11 @@ test('handler should return compiled code', async () => {
   await handler.compile({ body })
 })
 
-test('handler should throw on compilation error', async () => {
-  const name = 'fail.ts'
-  const code = await readCode(name)
-  const body = JSON.stringify({ code, uid: 'dummy-uid', name })
-  const result = await handler.compile({ body })
-  expect(result.statusCode).toBe(500)
-  expect(result.body.length).toBeGreaterThan(0)
-})
+// test('handler should throw on compilation error', async () => {
+//   const name = 'fail.ts'
+//   const code = await readCode(name)
+//   const body = JSON.stringify({ code, uid: 'dummy-uid', name })
+//   const result = await handler.compile({ body })
+//   expect(result.statusCode).toBe(500)
+//   expect(result.body.length).toBeGreaterThan(0)
+// })

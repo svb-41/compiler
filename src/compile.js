@@ -48,9 +48,13 @@ module.exports = async ({ code, ...params }, context = {}) => {
   const stats = await runCompiler(compiler)
   const errors = stats.compilation.errors
   if (errors.length > 0) {
-    const allErrors = errors.map(e => {
-      const { context, file, code, ...value } = JSON.parse(e.message)
-      return value
+    const allErrors = errors.map(err => {
+      try {
+        const { context, file, code, ...value } = JSON.parse(err.message)
+        return value
+      } catch (error) {
+        return err.message
+      }
     })
     const content = JSON.stringify(allErrors)
     throw new Error(content)
