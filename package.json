@@ -14,7 +14,7 @@
     "@babel/core": "^7.17.5",
     "@babel/preset-env": "^7.16.11",
     "@frenchpastries/millefeuille": "^1.0.2",
-    "@svb-41/core": "^0.6.0",
+    "@svb-41/core": "^0.7.0",
     "@svb-41/engine": "^0.5.0",
     "aws-sdk": "^2.1077.0",
     "babel-loader": "^8.2.3",

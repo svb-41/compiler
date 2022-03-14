@@ -1469,10 +1469,10 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@svb-41/core@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@svb-41/core/-/core-0.6.0.tgz#07892d0d6827d95e63631d7e45c1691e5b0adf0b"
-  integrity sha512-/XXyGfmB2ZmRn5kYemTRDDsU0jRSQj2kWlHuFzfTEDZONFozFuuxyxhZqKd1u2heQfN7hRsGobSy8wHmZZw9uw==
+"@svb-41/core@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@svb-41/core/-/core-0.7.0.tgz#67ce64aa35f056fed4cfb0e6a61a66b56be38ce2"
+  integrity sha512-ai/tjpZJO0og8gcn2assxlTQwCRTY6G82k+462QCfvFiu3XGH2dlKwArXE0u341dbl+RoD7E4p94dPrzj72rNg==
 
 "@svb-41/engine@^0.5.0":
   version "0.5.0"
