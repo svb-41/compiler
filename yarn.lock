@@ -1469,15 +1469,15 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@svb-41/core@^0.9.0":
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/@svb-41/core/-/core-0.9.0.tgz#948a99a285a53bfbe7c98cf56b886ea6faeb4551"
-  integrity sha512-UZgBnk/UWQcaEHHp5bDcoHQa75tFPGNp4z1s2IGtucUPm+hLDSAMGEiENUWNILw30fig31jHvLQunF890PfMDA==
+"@svb-41/core@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@svb-41/core/-/core-0.10.0.tgz#2cd682a6a0de9dfd22526f66aefee83dd7bb2fcd"
+  integrity sha512-7T8dsmlcN0/AsbCbgMjL1LTaR3j2dDL/61HbYN6bAj/d3cI3wZPJm0KDNB/b1M3TWzdZX2hfmFbbfDBWeULtvg==
 
-"@svb-41/engine@^0.8.0":
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/@svb-41/engine/-/engine-0.8.0.tgz#2ccfb35cc951fc882f17f0f39753eca6f34ef9f2"
-  integrity sha512-+Mf+sh8avl+BshtLr9ouEy5/78toisDxo2yW4FwHMytDq02mTgdpR8zgfU6QK/IvmMxlNxfF7NdZeIoiEc0gvQ==
+"@svb-41/engine@^0.9.0":
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/@svb-41/engine/-/engine-0.9.0.tgz#712e6530dccfa0271f8cf44fe9233b544312a3eb"
+  integrity sha512-ZfXLK6D6mQf1AY2UbC0aFTbjtp5sqikV3pd720HDgClXpznUxMmJ2CewzSHSa/TMFsk1sna807Hg0YGDBeH7ag==
   dependencies:
     uuid "^8.3.2"
 
