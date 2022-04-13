@@ -1,5 +1,5 @@
-const compile = require('../src/compile')
-const handler = require('../src/handler')
+const compile = require('../src/lib/compile')
+const handler = require('../src/handlers/compile')
 const fs = require('fs')
 const path = require('path')
 
