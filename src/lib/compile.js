@@ -40,7 +40,7 @@ module.exports = async ({ code, ...params }, context = {}) => {
   const name = `${execId}/${[params.uid, params.name].join('-')}`
   const mfs = await initMFS({ execId, name, code })
   const ufs = initUFS(mfs)
-  const nodeModules = path.resolve(__dirname, '../node_modules')
+  const nodeModules = path.resolve(__dirname, '../../node_modules')
   const lfs = await linkfs.link(ufs, ['/node_modules', nodeModules])
   const compiler = webpack(configuration(name))
   compiler.inputFileSystem = lfs
