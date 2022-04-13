@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk')
 
-const db = AWS.DynamoDB()
+const db = new AWS.DynamoDB()
 
 module.exports.sync = async (event, context) => {
   return { statusCode: 200 }

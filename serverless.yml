@@ -18,7 +18,7 @@ provider:
         - dynamodb:*
 
 functions:
-  profile-picture:
+  profile:
     handler: src/handlers/profile.profile
     events:
       - httpApi:
