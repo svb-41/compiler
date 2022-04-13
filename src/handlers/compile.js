@@ -2,7 +2,7 @@ const AWS = require('aws-sdk')
 const util = require('util')
 const path = require('path')
 const fs = require('fs')
-const compile = require('./compile')
+const compile = require('../lib/compile')
 
 const S3 = new AWS.S3()
 const Bucket = 'svb-41-dev'

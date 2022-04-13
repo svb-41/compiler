@@ -1,5 +1,5 @@
 const webpack = require('webpack')
-const configuration = require('../webpack.config')
+const configuration = require('../../webpack.config')
 const memfs = require('memfs')
 const unionfs = require('unionfs')
 const fs = require('fs')

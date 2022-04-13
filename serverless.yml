@@ -11,15 +11,75 @@ provider:
   httpApi:
     cors: true
   iamRoleStatements:
-    - Effect: 'Allow'
+    - Effect: Allow
+      Resource: '*'
       Action:
-        - 's3:PutObject'
-      Resource: 'arn:aws:s3:::*'
+        - s3:*
+        - dynamodb:*
 
 functions:
-  compile:
-    handler: src/handler.compile
+  profile-picture:
+    handler: src/handlers/profile.profile
     events:
       - httpApi:
-          path: /
+          path: /user/{id}
+          method: get
+  sync:
+    handler: src/handlers/sync.sync
+    events:
+      - httpApi:
+          path: /sync
           method: post
+  compile:
+    handler: src/handlers/compile.compile
+    events:
+      - httpApi:
+          path: /compile
+          method: post
+
+resources:
+  Resources:
+    # Save the state of the app
+    usersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: preferences
+        AttributeDefinitions:
+          - AttributeName: username
+            AttributeType: S
+        KeySchema:
+          - AttributeName: username
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    # Save the skirmishes configurations
+    skirmishTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: skirmishes
+        AttributeDefinitions:
+          - AttributeName: username
+            AttributeType: S
+        KeySchema:
+          - AttributeName: username
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    # Save the fight stats
+    statsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: stats
+        AttributeDefinitions:
+          - AttributeName: username
+            AttributeType: S
+        KeySchema:
+          - AttributeName: username
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1

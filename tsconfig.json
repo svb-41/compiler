@@ -17,9 +17,7 @@
     "noEmit": false,
     "outDir": "./dist",
     "baseUrl": ".",
-    "paths": {
-      // "@svb-41/core": ["src/starships-core.js"]
-    }
+    "paths": {}
   },
   "include": ["src"]
 }
