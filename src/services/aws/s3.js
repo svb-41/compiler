@@ -20,3 +20,17 @@ module.exports.put = async ({ path: p, content }) => {
     })
   }
 }
+
+module.exports.get = async ({ path: p }) => {
+  if (process.env.NODE_ENV === 'development') {
+    const base = path.resolve(__dirname, '../../../s3')
+    const final = path.resolve(base, p)
+    return await fs.promises.readFile(final)
+  } else {
+    return await new Promise((res, rej) => {
+      const cb = (err, res_) =>
+        err ? rej(err) : res(res_.Body.toString('utf-8'))
+      S3.getObject({ Bucket, Key: p }, cb)
+    })
+  }
+}

@@ -57,6 +57,12 @@ functions:
       - httpApi:
           path: /compile
           method: post
+  ai:
+    handler: src/handlers/compile.get
+    events:
+      - httpApi:
+          path: /ai
+          method: get
 
 resources:
   Resources:
