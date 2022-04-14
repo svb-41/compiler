@@ -1,35 +1,56 @@
 service: starship-compiler
 frameworkVersion: '3'
+useDotenv: true
+plugins:
+  - serverless-dynamodb-local
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    httpPort: 3333
+  dynamodb:
+    stages:
+      - dev
+    start:
+      migrate: true
+      port: 8000
 
 provider:
   name: aws
   region: eu-west-3
   runtime: nodejs14.x
-  lambdaHashingVersion: '20201221'
   memorySize: 2048
   timeout: 50
   httpApi:
     cors: true
-  iamRoleStatements:
-    - Effect: Allow
-      Resource: '*'
-      Action:
-        - s3:*
-        - dynamodb:*
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Resource: '*'
+          Action:
+            - s3:*
+            - dynamodb:*
 
 functions:
   profile:
     handler: src/handlers/profile.profile
     events:
       - httpApi:
-          path: /user/{id}
+          path: /user/{username}
           method: get
   sync:
     handler: src/handlers/sync.sync
     events:
       - httpApi:
-          path: /sync
+          path: /data/sync
           method: post
+  fetchData:
+    handler: src/handlers/sync.fetch
+    events:
+      - httpApi:
+          path: /data/fetch
+          method: get
   compile:
     handler: src/handlers/compile.compile
     events:
@@ -40,7 +61,7 @@ functions:
 resources:
   Resources:
     # Save the state of the app
-    usersTable:
+    preferencesTable:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: preferences
@@ -79,6 +100,36 @@ resources:
             AttributeType: S
         KeySchema:
           - AttributeName: username
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    # Save the fight stats
+    fleetConfigsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: fleetConfigs
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    # Save the AI
+    aisTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ais
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1

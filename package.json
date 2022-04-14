@@ -4,8 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "PORT=3333 NODE_ENV=development node --max-old-space-size=8192 src/emulator.js",
-    "dev": "PORT=3333 NODE_ENV=development nodemon --max-old-space-size=8192 src/emulator.js",
+    "start": "NODE_ENV=development serverless offline start",
     "deploy": "serverless deploy",
     "ci": "echo 'wow CI'",
     "test": "NODE_ENV=development jest"
@@ -19,9 +18,15 @@
     "@svb-41/engine": "^0.10.0",
     "aws-sdk": "^2.1077.0",
     "babel-loader": "^8.2.3",
+    "dotenv": "^16.0.0",
     "identicon.js": "^2.3.3",
+    "joi": "^17.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "jwks-rsa": "^2.0.5",
+    "jwt-decode": "^3.1.2",
     "linkfs": "^2.1.0",
     "memfs": "^3.4.1",
+    "node-fetch": "2.6.1",
     "ts-loader": "^9.2.6",
     "typescript": "^4.6.3",
     "unionfs": "^4.4.0",
@@ -32,6 +37,8 @@
     "jest": "^27.5.1",
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1",
+    "serverless-dynamodb-local": "^0.2.40",
+    "serverless-offline": "^8.5.0",
     "serverless-plugin-typescript": "^2.1.2",
     "webpack-cli": "^4.9.2"
   }
