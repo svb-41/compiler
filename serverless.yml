@@ -67,7 +67,7 @@ functions:
 resources:
   Resources:
     # Save the state of the app
-    preferencesTable:
+    usersTable:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: preferences
