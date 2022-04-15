@@ -33,6 +33,12 @@ provider:
             - dynamodb:*
 
 functions:
+  profile:
+    handler: src/handlers/profile.profile
+    events:
+      - httpApi:
+          path: /user/{username}
+          method: get
   sync:
     handler: src/handlers/sync.sync
     events:
