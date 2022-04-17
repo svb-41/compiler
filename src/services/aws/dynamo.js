@@ -27,6 +27,10 @@ module.exports.stats = {
     const Item = { username, ...data }
     return DynamoDB.put({ ...stats, Item }).promise()
   },
+  async leaders() {
+    // const params = {...stats}
+    // const result = await DynamoDB.scan(params).promise()
+  },
   async get(username) {
     const Key = { username }
     const result = await DynamoDB.get({ ...stats, Key }).promise()

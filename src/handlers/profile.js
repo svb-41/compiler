@@ -8,7 +8,6 @@ const renderProfilePicture = async username_ => {
   const uid = await auth.byUsername(username)
   if (!uid) return { statusCode: 404, body: 'Not Found' }
   const hash = crypto.createHash('SHA256').update(uid).digest().toString()
-  console.log('meh ?')
   const data = new Identicon(hash, { format: 'svg', margin: 0.2 })
   const svg = data.toString(true)
   return {

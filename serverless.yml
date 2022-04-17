@@ -12,6 +12,7 @@ custom:
     stages:
       - dev
     start:
+      inMemory: false
       migrate: true
       port: 8000
 
@@ -62,6 +63,30 @@ functions:
     events:
       - httpApi:
           path: /ai
+          method: get
+  skirmishes-save:
+    handler: src/handlers/skirmishes.save
+    events:
+      - httpApi:
+          path: /skirmishes
+          method: post
+  skirmishes-fight:
+    handler: src/handlers/skirmishes.fight
+    events:
+      - httpApi:
+          path: /skirmishes/{username}
+          method: get
+  stats-save:
+    handler: src/handlers/stats.save
+    events:
+      - httpApi:
+          path: /stats
+          method: post
+  stats-get:
+    handler: src/handlers/stats.get
+    events:
+      - httpApi:
+          path: /stats
           method: get
 
 resources:

@@ -3,6 +3,7 @@ const path = require('path')
 const fs = require('fs')
 const compile = require('../lib/compile')
 const AWS = require('../services/aws')
+const auth = require('../services/auth')
 
 const log = (...args) => {
   if (!process.env.JEST_WORKER_ID) {
@@ -33,8 +34,10 @@ module.exports.get = async (event, context) => {
   const { uid, id, decompiled } = event.queryStringParameters
   log(`Fetch { uid: ${uid}, id: ${id}, decompiled: ${decompiled} }`)
   try {
+    const au = event.headers.Authorization ?? event.headers.authorization ?? ''
     if (decompiled) {
-      //verify if token is coherent with uid
+      const { sub } = await auth.verify(au.slice(7))
+      if (sub !== uid) return { statusCode: 403 }
     }
     const path = `${uid}/${id}`
     const pathTS = `${path}.ts`
@@ -43,7 +46,7 @@ module.exports.get = async (event, context) => {
       decompiled ? AWS.S3.get({ path: pathTS }) : Promise.resolve(null),
       AWS.S3.get({ path: pathCompiled }),
     ])
-    if (process.env.NODE_ENV !== 'development') console.log(ts, compiled)
+    if (process.env.NODE_ENV === 'development') console.log(ts, compiled)
     log(`Fetched { uid: ${uid}}`)
     return {
       statusCode: 200,
