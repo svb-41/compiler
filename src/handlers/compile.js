@@ -13,7 +13,7 @@ const log = (...args) => {
 const headers = { 'Access-Control-Allow-Origin': '*' }
 module.exports.compile = async (event, context) => {
   const { code, uid, id, name } = JSON.parse(event.body)
-  log(`Compiling { uid: ${uid}, name: ${name} }`)
+  log(`Compiling { uid: ${uid}, name: ${name}, id: ${id} }`)
   try {
     const content = await compile({ code, uid, name }, context)
     const path = `${uid}/${id}`
@@ -21,7 +21,7 @@ module.exports.compile = async (event, context) => {
     const rawFile = AWS.S3.put({ path: `${path}.ts`, content: code })
     const results = await Promise.all([compiledFile, rawFile])
     if (process.env.NODE_ENV !== 'development') console.log(results)
-    log(`Compiled { uid: ${uid}, name: ${name} }`)
+    log(`Compiled { uid: ${uid}, name: ${name}, id: ${id} }`)
     return { statusCode: 200, body: content, headers }
   } catch (error) {
     console.error(`Error, ${error}`)
@@ -39,12 +39,14 @@ module.exports.get = async (event, context) => {
     const path = `${uid}/${id}`
     const pathTS = `${path}.ts`
     const pathCompiled = `${path}-compiled.js`
-    const [ts, compiled] = await Promise.all([
-      decompiled ? AWS.S3.get({ path: pathTS }) : Promise.resolve(null),
-      AWS.S3.get({ path: pathCompiled }),
-    ])
+    const [ts, compiled] = (
+      await Promise.all([
+        decompiled ? AWS.S3.get({ path: pathTS }) : Promise.resolve(null),
+        AWS.S3.get({ path: pathCompiled }),
+      ])
+    ).map(f => f.toString('utf8'))
     if (process.env.NODE_ENV !== 'development') console.log(ts, compiled)
-    log(`Fetched { uid: ${uid}}`)
+    log(`Fetched { uid: ${uid} }`)
     return {
       statusCode: 200,
       body: JSON.stringify({ ts, compiled, id }),

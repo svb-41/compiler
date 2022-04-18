@@ -28,8 +28,7 @@ module.exports.get = async ({ path: p }) => {
     return await fs.promises.readFile(final)
   } else {
     return await new Promise((res, rej) => {
-      const cb = (err, res_) =>
-        err ? rej(err) : res(res_.Body.toString('utf-8'))
+      const cb = (err, res_) => (err ? rej(err) : res(res_.Body))
       S3.getObject({ Bucket, Key: p }, cb)
     })
   }
