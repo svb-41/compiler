@@ -25,7 +25,8 @@ module.exports.get = async ({ path: p }) => {
   if (process.env.NODE_ENV === 'development') {
     const base = path.resolve(__dirname, '../../../s3')
     const final = path.resolve(base, p)
-    return await fs.promises.readFile(final)
+    const local = await fs.promises.readFile(final)
+    return local.toString()
   } else {
     return await new Promise((res, rej) => {
       const cb = (err, res_) => (err ? rej(err) : res(res_.Body))
