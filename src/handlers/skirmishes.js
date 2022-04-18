@@ -31,7 +31,8 @@ module.exports.fight = async (event, _context) => {
       return { statusCode: 400, body: JSON.stringify('Invalid name or size') }
     const opponent = await AWS.DynamoDB.skirmishes.get(username)
     const id = opponent?.fleets?.[size]
-    const fleet = id ? await AWS.DynamoDB.fleetConfigs.get(id) : null
+    const f = id ? await AWS.DynamoDB.fleetConfigs.get(id) : 'null'
+    const fleet = JSON.parse(f)
     return { statusCode: 200, body: JSON.stringify(fleet) }
   } catch (error) {
     console.error(error)

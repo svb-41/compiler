@@ -20,11 +20,14 @@ const renderProfilePicture = async username_ => {
   }
 }
 
-module.exports.profile = async (event, context) => {
+module.exports.profile = async (event, _context) => {
   const { username } = event.pathParameters
   if (username.endsWith('.svg')) {
     return renderProfilePicture(username)
   } else {
-    return { statusCode: 404, body: 'Not Found' }
+    const profile = await AWS.DynamoDB.preferences.get(username)
+    if (!profile) return { statusCode: 404, body: 'Not Found' }
+    const { color } = profile
+    return { statusCode: 200, body: JSON.stringify(color) }
   }
 }

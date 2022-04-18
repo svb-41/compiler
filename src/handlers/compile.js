@@ -31,14 +31,18 @@ module.exports.compile = async (event, context) => {
 }
 
 module.exports.get = async (event, context) => {
-  const { uid, id, decompiled } = event.queryStringParameters
+  const { uid: u, id, decompiled: d } = event.queryStringParameters
+  const decompiled = d === 'true' ? true : false
+  const uid = (await auth.byUsername(u).catch(() => null)) ?? u
   log(`Fetch { uid: ${uid}, id: ${id}, decompiled: ${decompiled} }`)
   try {
     const au = event.headers.Authorization ?? event.headers.authorization ?? ''
     if (decompiled) {
+      console.log('la ?')
       const { sub } = await auth.verify(au.slice(7))
       if (sub !== uid) return { statusCode: 403 }
     }
+    console.log('meh ?')
     const path = `${uid}/${id}`
     const pathTS = `${path}.ts`
     const pathCompiled = `${path}-compiled.js`
