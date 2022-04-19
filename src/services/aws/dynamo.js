@@ -15,8 +15,10 @@ module.exports.preferences = {
   },
   async get(username) {
     const Key = { username }
-    const result = await DynamoDB.get({ ...preferences, Key }).promise()
-    if (!result.Item) return null
+    const result = await DynamoDB.get({ ...preferences, Key })
+      .promise()
+      .catch(() => null)
+    if (!result) return null
     const { username: u, ...rest } = result.Item
     return rest
   },
@@ -33,8 +35,10 @@ module.exports.stats = {
   },
   async get(username) {
     const Key = { username }
-    const result = await DynamoDB.get({ ...stats, Key }).promise()
-    if (!result.Item) return null
+    const result = await DynamoDB.get({ ...stats, Key })
+      .promise()
+      .catch(() => null)
+    if (!result) return null
     const { username: u, ...rest } = result.Item
     return rest
   },
@@ -47,8 +51,10 @@ module.exports.skirmishes = {
   },
   async get(username) {
     const Key = { username }
-    const result = await DynamoDB.get({ ...skirmishes, Key }).promise()
-    if (!result.Item) return null
+    const result = await DynamoDB.get({ ...skirmishes, Key })
+      .promise()
+      .catch(() => null)
+    if (!result) return null
     const { username: u, ...rest } = result.Item
     return rest
   },
@@ -61,8 +67,10 @@ module.exports.ais = {
   },
   async get(id) {
     const Key = { id }
-    const result = await DynamoDB.get({ ...ais, Key }).promise()
-    if (!result.Item) return null
+    const result = await DynamoDB.get({ ...ais, Key })
+      .promise()
+      .catch(() => null)
+    if (!result) return null
     const { id: i, ...rest } = result.Item
     return rest
   },
@@ -75,8 +83,10 @@ module.exports.fleetConfigs = {
   },
   async get(id) {
     const Key = { id }
-    const result = await DynamoDB.get({ ...fleetConfigs, Key }).promise()
-    if (!result.Item) return null
+    const result = await DynamoDB.get({ ...fleetConfigs, Key })
+      .promise()
+      .catch(() => null)
+    if (!result) return null
     const { value } = result.Item
     return value
   },
