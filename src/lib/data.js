@@ -18,10 +18,21 @@ module.exports.fetch = async username => {
       return [id, data]
     })
   )
+  const fleetSkirmishes = (await AWS.DynamoDB.skirmishes.get(username)) ?? {
+    fleets: {
+      small: null,
+      huge: null,
+    },
+  }
   const toObj = (acc, [id, value]) => (value ? { ...acc, [id]: value } : acc)
   const ais = ais_.reduce(toObj, {})
   const fleetConfigs = cnf.reduce(toObj, {})
-  return { preferences, ais, fleetConfigs }
+  return {
+    preferences,
+    ais,
+    fleetConfigs,
+    fleetSkirmishes: fleetSkirmishes.fleets,
+  }
 }
 
 module.exports.persist = async (username, body) => {
