@@ -38,11 +38,9 @@ module.exports.get = async (event, context) => {
   try {
     const au = event.headers.Authorization ?? event.headers.authorization ?? ''
     if (decompiled) {
-      console.log('la ?')
       const { sub } = await auth.verify(au.slice(7))
       if (sub !== uid) return { statusCode: 403 }
     }
-    console.log('meh ?')
     const path = `${uid}/${id}`
     const pathTS = `${path}.ts`
     const pathCompiled = `${path}-compiled.js`

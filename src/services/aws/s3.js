@@ -29,8 +29,10 @@ module.exports.get = async ({ path: p }) => {
     return local.toString()
   } else {
     return await new Promise((res, rej) => {
-      const cb = (err, res_) => (err ? rej(err) : res(res_.Body))
-      S3.getObject({ Bucket, Key: p }, cb)
+      S3.getObject({ Bucket, Key: p }, (err, res_) => {
+        if (err) rej(err)
+        else res(res_.Body.toString())
+      })
     })
   }
 }
