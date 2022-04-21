@@ -18,7 +18,7 @@ module.exports.preferences = {
     const result = await DynamoDB.get({ ...preferences, Key })
       .promise()
       .catch(() => null)
-    if (!result) return null
+    if (!result?.Item) return null
     const { username: u, ...rest } = result.Item
     return rest
   },
@@ -38,7 +38,7 @@ module.exports.stats = {
     const result = await DynamoDB.get({ ...stats, Key })
       .promise()
       .catch(() => null)
-    if (!result) return null
+    if (!result?.Item) return null
     const { username: u, ...rest } = result.Item
     return rest
   },
@@ -54,7 +54,7 @@ module.exports.skirmishes = {
     const result = await DynamoDB.get({ ...skirmishes, Key })
       .promise()
       .catch(() => null)
-    if (!result) return null
+    if (!result?.Item) return null
     const { username: u, ...rest } = result.Item
     return rest
   },
@@ -70,7 +70,7 @@ module.exports.ais = {
     const result = await DynamoDB.get({ ...ais, Key })
       .promise()
       .catch(() => null)
-    if (!result) return null
+    if (!result?.Item) return null
     const { id: i, ...rest } = result.Item
     return rest
   },
@@ -86,7 +86,7 @@ module.exports.fleetConfigs = {
     const result = await DynamoDB.get({ ...fleetConfigs, Key })
       .promise()
       .catch(() => null)
-    if (!result) return null
+    if (!result?.Item) return null
     const { value } = result.Item
     return value
   },
