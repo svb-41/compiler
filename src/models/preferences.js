@@ -9,6 +9,7 @@ const schema = joi.object({
   favoritesAI: strArray,
   unlockedMissions: strArray,
   unlockedShips: strArray,
+  tags: joi.object().pattern(joi.string(), joi.string()).required(),
 })
 
 module.exports.validate = data => {
