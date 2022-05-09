@@ -25,8 +25,7 @@ module.exports.fight = async (event, _context) => {
     await auth.get(au.slice(7))
     const { username } = event.pathParameters
     const { size } = event.queryStringParameters
-    const s = size === 'small' || size === 'huge'
-    const areErrors = typeof username !== 'string' || username.length < 1 || !s
+    const areErrors = typeof username !== 'string' || username.length < 1
     if (areErrors)
       return { statusCode: 400, body: JSON.stringify('Invalid name or size') }
     const opponent = await AWS.DynamoDB.skirmishes.get(username)

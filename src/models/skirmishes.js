@@ -2,10 +2,8 @@ const joi = require('joi')
 
 const schema = joi.object({
   fleets: joi
-    .object({
-      small: joi.string().allow(null).required(),
-      huge: joi.string().allow(null).required(),
-    })
+    .object()
+    .pattern(joi.string(), joi.string().allow(null))
     .required(),
 })
 
