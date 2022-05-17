@@ -91,7 +91,12 @@ functions:
       - httpApi:
           path: /stats
           method: get
-
+  inventory:
+    handler: src/handlers/inventory.inventory
+    events:
+      - httpApi:
+          path: /inventory
+          method: get
 resources:
   Resources:
     # Save the state of the app
@@ -159,6 +164,36 @@ resources:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: ais
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    # Save all stuffs
+    stuffTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: stuff
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    # Save inventories
+    inventoryTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: inventory
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S

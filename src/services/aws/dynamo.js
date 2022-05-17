@@ -5,6 +5,8 @@ const ais = { TableName: 'ais' }
 const fleetConfigs = { TableName: 'fleetConfigs' }
 const stats = { TableName: 'stats' }
 const skirmishes = { TableName: 'skirmishes' }
+const inventory = { TableName: 'inventory' }
+const stuff = { TableName: 'stuff' }
 
 module.exports.client = DynamoDB
 
@@ -84,6 +86,38 @@ module.exports.fleetConfigs = {
   async get(id) {
     const Key = { id }
     const result = await DynamoDB.get({ ...fleetConfigs, Key })
+      .promise()
+      .catch(() => null)
+    if (!result?.Item) return null
+    const { value } = result.Item
+    return value
+  },
+}
+
+module.exports.inventory = {
+  put(id, value) {
+    const Item = { id, value }
+    return DynamoDB.put({ ...inventory, Item }).promise()
+  },
+  async get(id) {
+    const Key = { id }
+    const result = await DynamoDB.get({ ...inventory, Key })
+      .promise()
+      .catch(() => null)
+    if (!result?.Item) return null
+    const { value } = result.Item
+    return value
+  },
+}
+
+module.exports.stuff = {
+  put(id, value) {
+    const Item = { id, value }
+    return DynamoDB.put({ ...stuff, Item }).promise()
+  },
+  async get(id) {
+    const Key = { id }
+    const result = await DynamoDB.get({ ...stuff, Key })
       .promise()
       .catch(() => null)
     if (!result?.Item) return null
