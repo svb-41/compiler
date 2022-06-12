@@ -5,8 +5,8 @@ const schema = joi.object({
   type: joi.string().required(),
   category: joi.string().required(),
   used: joi.boolean().required(),
+  owner: joi.string().required(),
   image: joi.string(),
-  owner: joi.string(),
   ownStats: joi.string(), //stringify JSON in dynamo
   version: joi.string(), //semver probably
 })

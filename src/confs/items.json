@@ -1,0 +1,9 @@
+{
+  "types": ["metal", "fuel", "piece", "ship"],
+  "categories": {
+    "metal": ["steel", "lithium", "silicium", "copper"],
+    "fuel": ["uranium", "hydrogen"],
+    "piece": ["hull", "weapon", "radar", "thruster", "storage"],
+    "ship": ["fighter", "cruiser", "scout", "bomber", "destroyer", "stealth"]
+  }
+}
