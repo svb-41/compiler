@@ -14,15 +14,12 @@ module.exports.inventory = async (event, context) => {
     const au = event.headers.Authorization ?? event.headers.authorization ?? ''
     const username = await auth.get(au.slice(7))
     const generate = Boolean(event.queryStringParameters?.generate)
-    console.log(generate)
 
     const data = await getUserInventory(username)
     const inventory = await Promise.all(data.items.map(AWS.DynamoDB.stuff.get))
-    console.log(inventory)
-    console.log(data)
 
-    // console.log(inventory)
     if (generate) {
+      console.log('generate data')
       Array(40)
         .fill(1)
         .map(_ => inventoryLib.randomItem(username))
