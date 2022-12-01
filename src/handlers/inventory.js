@@ -13,18 +13,35 @@ module.exports.inventory = async (event, context) => {
   try {
     const au = event.headers.Authorization ?? event.headers.authorization ?? ''
     const username = await auth.get(au.slice(7))
+    const generate = Boolean(event.queryStringParameters?.generate)
+    console.log(generate)
+
     const data = await getUserInventory(username)
-    const items = Array(40)
-      .fill(1)
-      .map(_ => inventoryLib.randomItem(username))
-      .filter(_ => _)
-    // const inventory = await Promise.all(data.items.map(AWS.DynamoDB.stuff.get))
+    const inventory = await Promise.all(data.items.map(AWS.DynamoDB.stuff.get))
+    console.log(inventory)
+    console.log(data)
+
+    // console.log(inventory)
+    if (generate) {
+      Array(40)
+        .fill(1)
+        .map(_ => inventoryLib.randomItem(username))
+        .filter(_ => _)
+        .forEach(items.push)
+      await Promise.all([
+        ...items.map(item => AWS.DynamoDB.stuff.put(item.id, item)),
+        AWS.DynamoDB.inventory.put(username, {
+          items: items.map(({ id }) => id),
+          favorites: [],
+        }),
+      ])
+    }
+
     return {
       statusCode: 200,
       body: JSON.stringify({
         ...data,
-        inventory: items,
-        items: items.map(s => s.id),
+        inventory,
       }),
     }
   } catch (error) {
