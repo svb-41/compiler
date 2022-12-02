@@ -90,7 +90,7 @@ const randomPiece = owner => {
 }
 
 const randomHull = quality => owner => {
-  let points = randomElement(2 + quality) + 5
+  let points = randomElement(5 + quality) + 8
   const sizeVal = randomElement(Math.floor(points * 0.8)) + 1
   const size = sizeVal < 5 ? 16 : 32
   points -= sizeVal
@@ -228,7 +228,7 @@ const randomStorage = quality => owner =>
       version: '1.0.0',
       used: false,
       ownStats: JSON.stringify({
-        amo: randomElement(5 * quality) + 2,
+        amo: randomElement(20 * quality) + 2,
       }),
     },
   })

@@ -97,6 +97,12 @@ functions:
       - httpApi:
           path: /inventory
           method: get
+  recipe:
+    handler: src/handlers/inventory.recipe
+    events:
+      - httpApi:
+          path: /recipe
+          method: post
 resources:
   Resources:
     # Save the state of the app
